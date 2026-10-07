@@ -1,0 +1,30 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.cursor.is-on {
+  opacity: 1;
+}
+
+.cursor__ring {
+  position: absolute;
+  top: -18px;
+  left: -18px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--c-green);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(0, 230, 118, 0.5);
+  transform: scale(0.5);
+  transition: transform 0.45s var(--ease-heavy);
+}
+
+.cursor.is-hover .cursor__ring {
+  transform: scale(1.3);
+}

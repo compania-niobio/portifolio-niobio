@@ -1,0 +1,118 @@
+.final {
+  height: 760svh;
+}
+
+/* destino do link "Contagem": o ponto em que o relógio já está na tela */
+.final__anchor {
+  position: absolute;
+  bottom: 100svh;
+}
+
+.final__media,
+.final__shake,
+.final__zoom,
+.final__edge,
+.final__video,
+.final__vignette {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* some com as bordas do vídeo quando ele encolhe para mostrar a logo */
+.final__edge {
+  background:
+    linear-gradient(var(--c-bg), transparent 18%, transparent 78%, var(--c-bg)),
+    linear-gradient(90deg, var(--c-bg), transparent 8%, transparent 92%, var(--c-bg));
+  opacity: 0;
+}
+
+/* O vídeo inteiro, no tamanho que preenche a tela (o excesso é cortado pelo palco).
+   Assim, ao encolher para a logo, as laterais que estavam fora da tela aparecem. */
+.final__zoom {
+  inset: 50% auto auto 50%;
+  width: max(100%, calc(100svh * 1920 / 804));
+  height: auto;
+  aspect-ratio: 1920 / 804;
+  translate: -50% -50%;
+}
+
+.final__video {
+  object-fit: cover;
+  object-position: center;
+}
+
+.final__vignette {
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 25%, rgba(5, 8, 5, 0.88) 100%),
+    linear-gradient(transparent 45%, rgba(5, 8, 5, 0.9));
+}
+
+.final__lead {
+  position: absolute;
+  inset: calc(50% + min(22vw, 22svh) + 1.5rem) 0 auto;
+  text-align: center;
+}
+
+.final__frases {
+  position: absolute;
+  inset: auto 0 20svh;
+  display: grid;
+  padding-inline: var(--gutter);
+  text-align: center;
+}
+
+.final__frase {
+  grid-area: 1 / 1;
+  max-width: 20ch;
+  margin-inline: auto;
+  font-size: clamp(1.5rem, 4.4vw, 3.6rem);
+  letter-spacing: 0.08em;
+  text-shadow:
+    0 2px 30px rgba(0, 0, 0, 0.9),
+    var(--glow-text);
+  opacity: 0;
+}
+
+.final__countdown {
+  position: absolute;
+  inset: auto 0 clamp(1.2rem, 6svh, 4rem);
+  display: flex;
+  justify-content: center;
+  padding-inline: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .final .pin__stage {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 3rem;
+    padding-block: 8rem 3rem;
+  }
+
+  .final__anchor {
+    bottom: 60svh;
+  }
+
+  .final__lead {
+    display: none;
+  }
+
+  .final__frases,
+  .final__countdown {
+    position: relative;
+    inset: auto;
+  }
+
+  .final__frases {
+    gap: 1rem;
+  }
+
+  .final__frase {
+    grid-area: auto;
+    font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+    opacity: 1;
+  }
+}

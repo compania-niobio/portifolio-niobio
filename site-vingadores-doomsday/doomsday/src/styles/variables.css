@@ -1,0 +1,22 @@
+:root {
+  /* Cores */
+  --c-bg: #050805;
+  --c-green: #00e676;
+  --c-green-2: #1fe06a;
+  --c-green-deep: #0b3d1f;
+  --c-text: #ffffff;
+  --c-text-2: rgba(255, 255, 255, 0.72);
+  --c-line: rgba(0, 230, 118, 0.35);
+
+  /* Fontes */
+  --f-display: 'Cinzel', 'Times New Roman', serif;
+  --f-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Brilhos */
+  --glow-text: 0 0 18px rgba(0, 230, 118, 0.55), 0 0 60px rgba(0, 230, 118, 0.3);
+  --glow-box: 0 0 0 1px rgba(0, 230, 118, 0.5), 0 0 28px rgba(0, 230, 118, 0.35);
+
+  /* Layout */
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --ease-heavy: cubic-bezier(0.16, 1, 0.3, 1);
+}

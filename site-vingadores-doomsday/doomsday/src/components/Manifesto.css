@@ -1,0 +1,33 @@
+.manifesto {
+  height: 280svh;
+}
+
+.manifesto .pin__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 4svh, 3rem);
+  padding: 5rem var(--gutter) 2rem;
+  text-align: center;
+}
+
+.manifesto__text {
+  max-width: 20ch;
+  font-size: clamp(1.55rem, 5vw, 4.4rem);
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+}
+
+.manifesto__hook {
+  max-width: 34ch;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-style: italic;
+  color: var(--c-text-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .manifesto .pin__stage {
+    padding-block: 6rem;
+  }
+}
