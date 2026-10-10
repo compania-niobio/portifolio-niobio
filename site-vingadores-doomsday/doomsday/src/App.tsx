@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Cursor from './components/Cursor';
 import FinalImmersion from './components/FinalImmersion';
 import Footer from './components/Footer';
@@ -37,6 +38,7 @@ export default function App() {
       <div className="vignette" aria-hidden="true" />
       <div className="grain" aria-hidden="true" />
       <Cursor />
+      <Analytics />
     </>
   );
 }
