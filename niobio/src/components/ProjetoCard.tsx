@@ -2,7 +2,8 @@ import type { Projeto } from '../data/projetos';
 import { IconArrowUpRight } from './Icons';
 
 export function ProjetoCard({ projeto }: { projeto: Projeto }) {
-  const nome = `${projeto.titulo} · ${projeto.cliente}`;
+  // Espaço não separável antes do ponto: na quebra de linha ele fica com o título.
+  const nome = `${projeto.titulo} · ${projeto.cliente}`;
   return (
     <article className="card glass">
       <div className="card__preview">
@@ -36,7 +37,7 @@ export function ProjetoCard({ projeto }: { projeto: Projeto }) {
   );
 }
 
-/** Card fantasma: aparece enquanto há um único projeto, como gancho para o contato. */
+/** Card fantasma: fecha a lista de projetos, como gancho para o contato. */
 export function ProjetoFantasma() {
   return (
     <div className="card card--ghost">

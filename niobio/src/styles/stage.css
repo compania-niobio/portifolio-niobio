@@ -18,8 +18,9 @@
 .chapter--etapa3 {
   --len: 2.5;
 }
+/* No celular os projetos formam uma lista que anda com o scroll: mais tempo de pin */
 .chapter--etapa2 {
-  --len: calc(2.5 + var(--extra, 0));
+  --len: calc(2.5 + var(--extra, 0) * 2);
 }
 
 @media (min-width: 768px) {
@@ -467,6 +468,10 @@
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
+  }
+
+  .cards::before {
+    content: none;
   }
 
   .hook__arrow {
