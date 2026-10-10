@@ -1,0 +1,475 @@
+/*
+ * Etapas: cada <section class="chapter"> é o trecho de scroll; a .stage é a camada
+ * fixa em tela cheia (vídeo + textos). Como as camadas ficam empilhadas no mesmo
+ * lugar, a troca de vídeo é um crossfade real, sem corte e sem tela preta.
+ */
+
+.chapter {
+  position: relative;
+  height: calc(var(--len) * 100vh);
+  height: calc(var(--len) * 100svh);
+}
+
+/* Duração do scroll: mais curta no celular para não cansar o dedo */
+.chapter--hero {
+  --len: 2;
+}
+.chapter--etapa1,
+.chapter--etapa3 {
+  --len: 2.5;
+}
+.chapter--etapa2 {
+  --len: calc(2.5 + var(--extra, 0));
+}
+
+@media (min-width: 768px) {
+  .chapter--hero {
+    --len: 2.5;
+  }
+  .chapter--etapa1,
+  .chapter--etapa3 {
+    --len: 3;
+  }
+  .chapter--etapa2 {
+    --len: calc(3.5 + var(--extra, 0));
+  }
+}
+
+/* A última etapa ganha uma tela a mais: o rodapé só sobe depois do clarão */
+.chapter--last {
+  height: calc((var(--len) + 1) * 100vh);
+  height: calc((var(--len) + 1) * 100svh);
+}
+
+/* Âncora do link "Orçamento": ponto em que o bloco de contato está na tela */
+.chapter__anchor {
+  position: absolute;
+  top: calc(0.6 * var(--len) * 100vh);
+  top: calc(0.6 * var(--len) * 100svh);
+  left: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.stage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  /* lvh: cobre a tela mesmo quando a barra do navegador some, sem redimensionar o vídeo */
+  height: 100vh;
+  height: 100lvh;
+  overflow: hidden;
+  background: var(--navy);
+  pointer-events: none;
+}
+
+/* As etapas entram em crossfade via JS; até lá ficam ocultas */
+.chapter:not(.chapter--hero) .stage {
+  visibility: hidden;
+}
+
+.stage a,
+.stage button,
+.stage .card,
+.stage .contact__panel {
+  pointer-events: auto;
+}
+
+/* ---------- Vídeo ---------- */
+
+.stage__media {
+  position: absolute;
+  inset: 0;
+}
+
+/* Paisagem e desktop: tela cheia em cover */
+.stage__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% var(--pos-y, 30%);
+}
+
+.stage__backdrop {
+  display: none;
+}
+
+/* Retrato: "vídeo enquadrado" sobre o mesmo frame desfocado, sem tarja */
+@media (orientation: portrait) {
+  .stage__media {
+    /* 220vw de largura; em telas muito altas e finas, cresce até a altura dar 50svh */
+    --fw: max(220vw, 88.89vh);
+    --fw: max(220vw, 88.89svh);
+  }
+
+  .stage__backdrop {
+    display: block;
+    position: absolute;
+    inset: -6%;
+    /* --dim: a Etapa 3 clareia o fundo junto com o clarão do vídeo */
+    filter: blur(32px) brightness(var(--dim, 0.6));
+  }
+
+  .stage__backdrop img,
+  .stage__backdrop canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+  }
+
+  .stage__video {
+    inset: auto;
+    /* --focus: ponto do quadro (0–1) que fica no centro da tela */
+    left: calc(50% - var(--focus, 0.5) * var(--fw));
+    top: calc(50vh - var(--fw) * 0.28125);
+    top: calc(50svh - var(--fw) * 0.28125);
+    width: var(--fw);
+    height: calc(var(--fw) * 0.5625);
+    object-position: 50% 50%;
+    -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent);
+  }
+}
+
+.stage__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(2, 7, 20, 0.6) 100%);
+}
+
+/* Véu de contraste atrás dos textos (coluna da esquerda) */
+.stage__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(var(--navy-rgb), 0.75), transparent 60%);
+}
+
+@media (orientation: portrait) {
+  .stage__veil {
+    background: none;
+  }
+}
+
+/* Clarão final: mesma cor do rodapé */
+.stage__flash {
+  position: absolute;
+  inset: 0;
+  background: var(--beige-light);
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ---------- Camada de textos ---------- */
+
+.stage__ui {
+  position: absolute;
+  inset: 0 0 auto 0;
+  /* svh: os textos nunca ficam atrás da barra do navegador nem pulam com ela */
+  height: 100vh;
+  height: 100svh;
+}
+
+/* Zona segura dos textos: coluna da esquerda (o sujeito fica ao centro) */
+.copy {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--gutter) + var(--safe-l));
+  display: grid;
+  align-content: center;
+  width: min(40%, 36rem);
+  padding-block: calc(var(--header-h) + var(--safe-t) + 3rem) calc(2rem + var(--safe-b));
+}
+
+/* Os "tempos" de texto ocupam o mesmo lugar e se revezam */
+.copy > .beat {
+  grid-area: 1 / 1;
+  align-self: center;
+  min-width: 0;
+}
+
+.copy--top {
+  align-content: start;
+  padding-top: max(20vh, calc(var(--header-h) + var(--safe-t) + 3.5rem));
+}
+
+/* Retrato: textos embaixo do vídeo enquadrado, sobre uma faixa translúcida. Nunca no rosto. */
+@media (orientation: portrait) {
+  .copy,
+  .copy--top {
+    top: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    min-height: 24vh;
+    min-height: 24svh;
+    align-content: center;
+    justify-items: center;
+    padding: 3.5rem calc(var(--gutter) + var(--safe-r)) calc(1.5rem + var(--safe-b))
+      calc(var(--gutter) + var(--safe-l));
+    text-align: center;
+    background: linear-gradient(
+      to top,
+      rgba(var(--navy-rgb), 0.9),
+      rgba(var(--navy-rgb), 0.72) 62%,
+      transparent
+    );
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .copy,
+  .copy--top {
+    align-content: center;
+    width: min(42%, 30rem);
+    padding-block: calc(var(--header-h) + var(--safe-t) + 1.5rem) calc(0.75rem + var(--safe-b));
+  }
+
+  .lead {
+    display: none;
+  }
+}
+
+/* ---------- Etapa 1: certificados ao lado do nome ---------- */
+
+.certs__title {
+  margin-bottom: 0.75rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.85rem, 0.4vw + 0.78rem, 1.2rem);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+
+.certs__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.cert {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  max-width: 100%;
+  padding: 0.42em 0.95em 0.42em 0.7em;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: rgba(14, 42, 92, 0.45);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: clamp(0.8rem, 0.35vw + 0.74rem, 1.05rem);
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--white);
+}
+
+.cert svg {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  stroke-width: 2.4;
+  color: var(--gold-light);
+}
+
+/* Paisagem e desktop: o nome segue na coluna da esquerda; os selos, numa coluna à direita */
+@media (orientation: landscape) {
+  .chapter--etapa1 .copy {
+    --copy-w: min(40vw, 36rem);
+    right: calc(var(--gutter) + var(--safe-r));
+    width: auto;
+    grid-template-columns: var(--copy-w) minmax(0, 1fr);
+  }
+
+  .chapter--etapa1 .beat--nome {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .nome {
+    flex: none;
+    width: var(--copy-w);
+  }
+
+  .certs {
+    max-width: min(30vw, 22rem);
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .chapter--etapa1 .copy {
+    --copy-w: min(42vw, 30rem);
+  }
+
+  .certs__title {
+    margin-bottom: 0.4rem;
+  }
+
+  .certs__list {
+    gap: 0.3rem;
+  }
+}
+
+/* Retrato: fileira de selos abaixo do nome, dentro da faixa de texto */
+@media (orientation: portrait) {
+  .certs {
+    margin-top: 0.9rem;
+  }
+
+  .certs__title {
+    margin-bottom: 0.5rem;
+  }
+
+  .certs__list {
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+}
+
+/* Três pilares, um a um, com brilho dourado */
+.pillars {
+  display: grid;
+  gap: 0.15em;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4.2vw + 0.6rem, 4.75rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  text-shadow: var(--glow-gold);
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .pillars {
+    font-size: clamp(1.5rem, 3.4vw + 0.4rem, 3rem);
+  }
+}
+
+/* Frase-gancho com a seta dourada descendo */
+.hook {
+  display: grid;
+  gap: 1.1rem;
+  justify-items: inherit;
+}
+
+.hook p {
+  max-width: min(90vw, 38ch);
+  font-family: var(--font-display);
+  font-size: var(--fs-phrase);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+
+.hook__arrow {
+  display: inline-flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--gold-light);
+  filter: drop-shadow(0 0 10px rgba(232, 193, 112, 0.6));
+  animation: hook-drop 1.8s var(--ease-out) infinite;
+}
+
+.hook__arrow svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media (orientation: portrait) {
+  .hook {
+    gap: 0.6rem;
+  }
+}
+
+@keyframes hook-drop {
+  0% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+
+/* ---------- Movimento reduzido: sem pin nem scrub, cada etapa estática com o poster ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter,
+  .chapter--last {
+    height: auto;
+  }
+
+  .chapter__anchor {
+    top: 0;
+  }
+
+  .stage,
+  .chapter:not(.chapter--hero) .stage {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    visibility: visible;
+  }
+
+  .stage__veil {
+    background: rgba(var(--navy-rgb), 0.62);
+  }
+
+  .stage__flash {
+    display: none;
+  }
+
+  .chapter:not(.chapter--hero) .stage__ui {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.5rem;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: calc(var(--header-h) + var(--safe-t) + 2rem) calc(var(--gutter) + var(--safe-r))
+      calc(3rem + var(--safe-b)) calc(var(--gutter) + var(--safe-l));
+  }
+
+  .chapter:not(.chapter--hero) :is(.copy, .cards, .contact) {
+    position: static;
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    translate: none;
+    background: none;
+  }
+
+  .chapter:not(.chapter--hero) .copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .hook__arrow {
+    animation: none;
+  }
+}

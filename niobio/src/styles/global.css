@@ -1,0 +1,435 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import './variables.css';
+@import './stage.css';
+@import './sections.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  overflow-x: clip;
+}
+
+html {
+  background: var(--navy);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+/* Grão sutil por cima de tudo */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Tipografia compartilhada ---------- */
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-title);
+  font-weight: 700;
+  line-height: 0.94;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  text-shadow: var(--glow-gold);
+}
+
+.lead {
+  margin-top: 0.75em;
+  font-size: clamp(1rem, 0.6vw + 0.9rem, 1.6rem);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--white-soft);
+}
+
+.phrase {
+  max-width: min(90vw, 38ch);
+  font-family: var(--font-display);
+  font-size: var(--fs-phrase);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.phrase .w--gold {
+  color: var(--gold-light);
+  text-shadow: var(--glow-gold);
+}
+
+/* ---------- Botões ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  font-size: var(--fs-body);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition:
+    transform 0.35s var(--ease-out),
+    box-shadow 0.35s var(--ease-out),
+    background-color 0.35s;
+}
+
+.btn svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.btn--gold {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--navy);
+}
+
+.btn--lg {
+  min-height: 56px;
+  padding-inline: 2.2rem;
+  font-weight: 600;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 34px rgba(232, 193, 112, 0.45);
+  }
+}
+
+/* Glassmorphism azul-escuro com borda dourada */
+.glass {
+  background: rgba(8, 22, 52, 0.68);
+  border: 1px solid rgba(212, 163, 74, 0.6);
+  border-radius: 20px;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px rgba(2, 6, 18, 0.5);
+}
+
+/* ---------- Barra de progresso ---------- */
+
+.progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 3px;
+  pointer-events: none;
+}
+
+.progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.tone-light .progress__bar {
+  background: var(--gold-deep);
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(var(--header-h) + var(--safe-t));
+  padding: var(--safe-t) calc(var(--gutter) + var(--safe-r)) 0 calc(var(--gutter) + var(--safe-l));
+  transition:
+    transform 0.5s var(--ease-out),
+    color 0.4s;
+}
+
+.header.is-hidden:not(:focus-within) {
+  transform: translateY(-110%);
+}
+
+.header__logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* O brilho ciano destaca o logo azul do fundo azul-marinho e dos vídeos */
+.header__logo img {
+  width: clamp(36px, 3vw + 24px, 56px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.45));
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .header__logo img {
+    width: 40px;
+  }
+}
+
+.header__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0.35rem 1.1rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.header__cta:active {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .header__cta:hover {
+    background: var(--gold);
+    color: var(--navy);
+  }
+}
+
+/* Sobre o clarão e o rodapé bege, o header troca o branco pelo azul-marinho */
+.tone-light .header {
+  color: var(--navy);
+}
+
+.tone-light .header__cta {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+/* ---------- Cursor dourado (só com mouse) ---------- */
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 70;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border: 1.5px solid var(--gold-light);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.3s,
+    scale 0.3s var(--ease-out),
+    background-color 0.3s;
+}
+
+.cursor.is-on {
+  opacity: 0.9;
+}
+
+.cursor.is-active {
+  scale: 1.7;
+  background: rgba(232, 193, 112, 0.18);
+}
+
+.tone-light .cursor {
+  border-color: var(--gold-deep);
+}
+
+/* ---------- Rodapé ---------- */
+
+.footer {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2.5rem, 8vh, 6rem);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--header-h) + var(--safe-t) + 1.5rem) calc(var(--gutter) + var(--safe-r))
+    calc(2rem + var(--safe-b)) calc(var(--gutter) + var(--safe-l));
+  background: var(--beige-light);
+  color: var(--navy);
+  text-align: center;
+}
+
+.footer__phrase {
+  max-width: 14ch;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 11vw, 11rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* A palavra não quebra no meio: as letras ficam juntas */
+.footer__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.footer__word--gold {
+  color: var(--gold-deep);
+}
+
+.footer__letter {
+  display: inline-block;
+}
+
+.footer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 2rem;
+  width: 100%;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(var(--navy-rgb), 0.18);
+  font-size: var(--fs-small);
+}
+
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1.5rem;
+}
+
+.footer__links a,
+.footer__top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  font-weight: 500;
+  text-underline-offset: 4px;
+}
+
+.footer__email {
+  overflow-wrap: anywhere;
+}
+
+.footer__top svg {
+  width: 1.1em;
+  height: 1.1em;
+  color: var(--gold-deep);
+}
+
+.footer__links a:active,
+.footer__top:active {
+  text-decoration: underline;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footer__links a:hover,
+  .footer__top:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--gold-deep);
+  }
+}
+
+@media (max-width: 767px) {
+  .footer__links {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .footer__phrase {
+    max-width: none;
+    font-size: clamp(2rem, 7.5vw, 5rem);
+  }
+}

@@ -1,0 +1,64 @@
+:root {
+  /* Cores: saem dos próprios vídeos */
+  --navy: #06122b;
+  --navy-rgb: 6, 18, 43;
+  --blue: #0e2a5c;
+  --cyan: #4fc3f7;
+  --gold: #d4a34a;
+  --gold-light: #e8c170;
+  /* Dourado mais fechado: o único que tem contraste sobre o bege */
+  --gold-deep: #94680f;
+  --beige: #efe6d2;
+  --beige-light: #f7f1e3;
+  --white: #ffffff;
+  --white-soft: rgba(255, 255, 255, 0.72);
+
+  /* Fontes */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --font-body: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Escala tipográfica fluida */
+  --fs-title: clamp(2.25rem, 7vw + 1rem, 6.5rem);
+  --fs-phrase: clamp(1.5rem, 4vw + 0.5rem, 3.5rem);
+  --fs-body: clamp(1rem, 0.4vw + 0.9rem, 1.25rem);
+  --fs-small: clamp(0.75rem, 0.3vw + 0.7rem, 0.95rem);
+
+  /* Layout */
+  --gutter: max(5vw, 1.25rem);
+  --header-h: 56px;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+
+  --glow-gold: 0 0 28px rgba(232, 193, 112, 0.45);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-h: 72px;
+  }
+}
+
+/* Telas grandes: toda a escala em rem cresce junto, para nada ficar miúdo */
+@media (min-width: 1920px) and (min-height: 900px) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
+@media (min-width: 2400px) {
+  html {
+    font-size: 125%;
+  }
+}
+
+/* Celular em paisagem: altura muito pequena, títulos ~30% menores */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-h: 48px;
+    --fs-title: clamp(1.6rem, 4.9vw + 0.7rem, 4.5rem);
+    --fs-phrase: clamp(1.15rem, 2.8vw + 0.35rem, 2.4rem);
+  }
+}
